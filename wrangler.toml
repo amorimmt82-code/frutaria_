@@ -1,0 +1,38 @@
+name = "frutaria-em-casa"
+main = "src/worker/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# O Worker serve o SPA estático do dist/ E os endpoints /api/*.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+# Base de dados D1 (catálogo, encomendas, pagamentos).
+# Crie com:  npx wrangler d1 create frutaria
+# Depois substitua o database_id abaixo pelo ID que o comando devolveu.
+[[d1_databases]]
+binding = "DB"
+database_name = "frutaria"
+database_id = "e4c92d56-cde7-447c-b414-c237859e7900"
+migrations_dir = "migrations"
+
+# KV — sessões admin e rate-limit.
+# Crie com:  npx wrangler kv namespace create SESSIONS
+# Depois substitua o id abaixo pelo ID que o comando devolveu.
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "6bd68355bd2a4c20aef0895a0f17b677"
+
+# Variáveis públicas (não secretas). Os secrets (ADMIN_PASSCODE, BREVO_API_KEY)
+# devem ser definidos com:  npx wrangler secret put NOME
+[vars]
+ADMIN_EMAIL = "frutariaemcasa2021@gmail.com"
+ADMIN_NOTIFICATION_EMAIL = "frutariaemcasa2021@gmail.com"
+ORDER_NOTIFICATION_EMAIL = "frutariaemcasa2021@gmail.com"
+# Email remetente. Tem de estar verificado em Brevo > Senders & IP > Senders.
+MAIL_FROM = "Frutaria em Casa <notificacaofrutaria@gmail.com>"
+ALLOWED_IMAGE_HOSTS = "images.unsplash.com,plus.unsplash.com"
+# Cola aqui a tua nova pk_test_... ou pk_live_... (é segura, vai para o browser).
+STRIPE_PUBLISHABLE_KEY = ""
